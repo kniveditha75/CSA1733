@@ -1,0 +1,55 @@
+# Missionaries and Cannibals Problem
+
+def is_safe(state):
+    m_left, c_left, m_right, c_right, boat = state
+    if m_left < 0 or c_left < 0 or m_right < 0 or c_right < 0:
+        return False
+    if (m_left < c_left and m_left > 0) or (m_right < c_right and m_right > 0):
+        return False
+    return True
+
+def get_possible_moves(state):
+    m_left, c_left, m_right, c_right, boat = state
+    moves = []
+    if boat == 'left':
+        if m_left > 0:
+            moves.append((m_left - 1, c_left, m_right + 1, c_right, 'right'))
+        if m_left > 1:
+            moves.append((m_left - 2, c_left, m_right + 2, c_right, 'right'))
+        if c_left > 0:
+            moves.append((m_left, c_left - 1, m_right, c_right + 1, 'right'))
+        if c_left > 1:
+            moves.append((m_left, c_left - 2, m_right, c_right + 2, 'right'))
+        if m_left > 0 and c_left > 0:
+            moves.append((m_left - 1, c_left - 1, m_right + 1, c_right + 1, 'right'))
+    else:
+        if m_right > 0:
+            moves.append((m_left + 1, c_left, m_right - 1, c_right, 'left'))
+        if m_right > 1:
+            moves.append((m_left + 2, c_left, m_right - 2, c_right, 'left'))
+        if c_right > 0:
+            moves.append((m_left, c_left + 1, m_right, c_right - 1, 'left'))
+        if c_right > 1:
+            moves.append((m_left, c_left + 2, m_right, c_right - 2, 'left'))
+        if m_right > 0 and c_right > 0:
+            moves.append((m_left + 1, c_left + 1, m_right - 1, c_right - 1, 'left'))
+    return [move for move in moves if is_safe(move)]
+
+def solve_missionaries_and_cannibals():
+    initial_state = (3, 3, 0, 0, 'left')
+    goal_state = (0, 0, 3, 3, 'right')
+    frontier = [initial_state]
+    explored = set()
+    
+    while frontier:
+        state = frontier.pop(0)
+        if state == goal_state:
+            return state
+        explored.add(state)
+        for move in get_possible_moves(state):
+            if move not in explored and move not in frontier:
+                frontier.append(move)
+    return None
+
+solution = solve_missionaries_and_cannibals()
+print("Solution:", solution)
