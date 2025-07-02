@@ -1,0 +1,52 @@
+# Map Coloring to Implement CSP
+
+class MapColoringCSP:
+    def __init__(self, variables, domains, constraints):
+        self.variables = variables
+        self.domains = domains
+        self.constraints = constraints
+        self.assignments = {}
+
+    def is_consistent(self, var, value):
+        for neighbor in self.constraints.get(var, []):
+            if neighbor in self.assignments and self.assignments[neighbor] == value:
+                return False
+        return True
+
+    def backtrack(self):
+        if len(self.assignments) == len(self.variables):
+            return self.assignments
+        
+        unassigned_vars = [v for v in self.variables if v not in self.assignments]
+        var = unassigned_vars[0]
+
+        for value in self.domains[var]:
+            if self.is_consistent(var, value):
+                self.assignments[var] = value
+                result = self.backtrack()
+                if result:
+                    return result
+                del self.assignments[var]
+        return None
+
+def main():
+    variables = ['A', 'B', 'C', 'D']
+    domains = {
+        'A': ['Red', 'Green', 'Blue'],
+        'B': ['Red', 'Green', 'Blue'],
+        'C': ['Red', 'Green', 'Blue'],
+        'D': ['Red', 'Green', 'Blue']
+    }
+    constraints = {
+        'A': ['B', 'C', 'D'],
+        'B': ['A', 'C', 'D'],
+        'C': ['A', 'B', 'D'],
+        'D': ['A', 'B', 'C']
+    }
+
+    csp = MapColoringCSP(variables, domains, constraints)
+    solution = csp.backtrack()
+    print(solution)
+
+if __name__ == "__main__":
+    main()
