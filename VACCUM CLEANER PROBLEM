@@ -1,0 +1,44 @@
+# Vacuum Cleaner Problem in AI
+
+class VacuumCleaner:
+    def __init__(self, room):
+        self.room = room
+        self.position = (0, 0)
+        self.cleaned_positions = set()
+
+    def move(self, direction):
+        x, y = self.position
+        if direction == 'up' and x > 0:
+            self.position = (x - 1, y)
+        elif direction == 'down' and x < len(self.room) - 1:
+            self.position = (x + 1, y)
+        elif direction == 'left' and y > 0:
+            self.position = (x, y - 1)
+        elif direction == 'right' and y < len(self.room[0]) - 1:
+            self.position = (x, y + 1)
+
+    def clean(self):
+        self.cleaned_positions.add(self.position)
+
+    def is_dirty(self):
+        return self.room[self.position[0]][self.position[1]] == 1
+
+    def run(self):
+        while True:
+            if self.is_dirty():
+                self.clean()
+            else:
+                # Move randomly
+                import random
+                direction = random.choice(['up', 'down', 'left', 'right'])
+                self.move(direction)
+
+# Example usage
+room = [
+    [1, 0, 1],
+    [0, 0, 0],
+    [1, 1, 1]
+]
+
+vacuum = VacuumCleaner(room)
+vacuum.run()
