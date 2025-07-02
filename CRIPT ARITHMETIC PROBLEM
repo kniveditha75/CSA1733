@@ -1,0 +1,24 @@
+# Arithmetic Problem Solver in AI
+
+import random
+
+def generate_problem():
+    operators = ['+', '-', '*', '/']
+    num1 = random.randint(1, 100)
+    num2 = random.randint(1, 100)
+    operator = random.choice(operators)
+    
+    if operator == '/':
+        num1 = num1 * num2  # Ensure no division by zero
+    
+    problem = f"{num1} {operator} {num2}"
+    return problem
+
+def solve_problem(problem):
+    return eval(problem)
+
+if __name__ == "__main__":
+    problem = generate_problem()
+    print(f"Generated Problem: {problem}")
+    solution = solve_problem(problem)
+    print(f"Solution: {solution}")
